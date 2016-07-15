@@ -1,0 +1,10 @@
+
+[
+[ "ns" "respo-inflow-pop.component.container" [ ":require" [ "[]" "hsl.core" ":refer" [ "[]" "hsl" ] ] [ "[]" "respo.alias" ":refer" [ "[]" "create-comp" "div" "span" ] ] [ "[]" "respo.component.text" ":refer" [ "[]" "comp-text" ] ] [ "[]" "respo-inflow-pop.component.dialog" ":refer" [ "[]" "comp-dialog" ] ] [ "[]" "respo-inflow-pop.style.widget" ":as" "widget" ] [ "[]" "respo-inflow-pop.style.layout" ":as" "layout" ] [ "[]" "respo-inflow-pop.style.typeset" ":as" "typeset" ] [ "[]" "respo-inflow-pop.style.decoration" ":as" "decoration" ] ] ]
+[ "defn" "init-state" [ "store" ] "false" ]
+[ "defn" "update-state" [ "state" ] [ "not" "state" ] ]
+[ "defn" "on-click" [ "mutate!" ] [ "fn" [ "e" "dispatch!" ] [ "mutate!" ] ] ]
+[ "defn" "on-close" [ "mutate!" ] [ "fn" [  ] [ "mutate!" ] ] ]
+[ "defn" "render" [ "store" ] [ "fn" [ "state" "mutate!" ] [ "div" [ "{}" [ ":style" [ "merge" "widget/card" "typeset/page-default" ] ] ] [ "span" [ "{}" ":attrs" [ "{}" ":inner-text" "|Container" ] ] ] [ "div" [ "{}" ] [ "div" [ "{}" [ ":style" "widget/button" ] [ ":event" [ "{}" [ ":click" [ "on-click" "mutate!" ] ] ] ] ] [ "comp-text" "|Toggle" "nil" ] ] ] [ "comp-text" "state" "nil" ] [ "if" "state" [ "comp-dialog" [ "on-close" "mutate!" ] [ "div" [ "{}" ] [ "comp-text" "|Inside" "nil" ] ] ] ] ] ] ]
+[ "def" "comp-container" [ "create-comp" ":container" "init-state" "update-state" "render" ] ]
+]

@@ -34,6 +34,7 @@
     (transform-cirru)
     (target :dir #{"compiled/"})))
 
+(def icons-css "http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css")
 (defn use-text [x] {:attrs {:innerHTML x}})
 (defn html-dsl [data fileset]
   (make-html
@@ -41,6 +42,7 @@
     (head {}
       (title (use-text "Inflow pop"))
       (link {:attrs {:rel "icon" :type "image/png" :href "mvc-works-192x192.png"}})
+      (link {:attrs {:rel "stylesheet" :href icons-css}})
       (if (:build? data)
         (link (:attrs {:rel "manifest" :href "manifest.json"})))
       (meta'{:attrs {:charset "utf-8"}})
@@ -99,7 +101,7 @@
 
 (deftask rsync []
   (with-pre-wrap fileset
-    (sh "rsync" "-r" "target/" "tiye:repo/mvc-works/boot-workflow" "--exclude" "main.out" "--delete")
+    (sh "rsync" "-r" "target/" "tiye.me:repo/respo-mvc/inflow-pop" "--exclude" "main.out" "--delete")
     fileset))
 
 (deftask send-tiye []

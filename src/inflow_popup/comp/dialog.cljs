@@ -1,5 +1,5 @@
 
-(ns inflow-popup.component.dialog
+(ns inflow-popup.comp.dialog
   (:require [respo.alias :refer [create-comp div]]
             [respo.comp.text :refer [comp-text]]
             [inflow-popup.style.layout :as layout]

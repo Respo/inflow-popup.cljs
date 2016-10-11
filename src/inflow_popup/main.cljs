@@ -1,7 +1,7 @@
 
 (ns inflow-popup.main
   (:require [respo.core :refer [render! clear-cache!]]
-            [inflow-popup.component.container :refer [comp-container]]
+            [inflow-popup.comp.container :refer [comp-container]]
             [cljs.reader :refer [read-string]]))
 
 (defn dispatch! [op op-data])

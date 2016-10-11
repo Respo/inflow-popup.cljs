@@ -1,5 +1,5 @@
 
-(ns inflow-popup.component.dropdown
+(ns inflow-popup.comp.dropdown
   (:require [hsl.core :refer [hsl]]
             [respo.alias :refer [create-comp div span style]]
             [respo.comp.text :refer [comp-text]]

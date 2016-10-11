@@ -1,11 +1,11 @@
 
-(ns inflow-popup.component.container
+(ns inflow-popup.comp.container
   (:require [hsl.core :refer [hsl]]
             [respo.alias :refer [create-comp div span]]
             [respo.comp.text :refer [comp-text]]
             [respo.comp.debug :refer [comp-debug]]
-            [inflow-popup.component.dialog :refer [comp-dialog]]
-            [inflow-popup.component.dropdown :refer [comp-dropdown]]
+            [inflow-popup.comp.dialog :refer [comp-dialog]]
+            [inflow-popup.comp.dropdown :refer [comp-dropdown]]
             [inflow-popup.style.widget :as widget]
             [inflow-popup.style.layout :as layout]
             [inflow-popup.style.typeset :as typeset]

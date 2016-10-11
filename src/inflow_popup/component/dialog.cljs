@@ -1,10 +1,10 @@
 
-(ns respo-inflow-pop.component.dialog
+(ns inflow-popup.component.dialog
   (:require [respo.alias :refer [create-comp div]]
-            [respo.component.text :refer [comp-text]]
-            [respo-inflow-pop.style.layout :as layout]
-            [respo-inflow-pop.style.widget :as widget]
-            [respo-inflow-pop.style.decoration :as decoration]))
+            [respo.comp.text :refer [comp-text]]
+            [inflow-popup.style.layout :as layout]
+            [inflow-popup.style.widget :as widget]
+            [inflow-popup.style.decoration :as decoration]))
 
 (defn on-focus [e dispatch!])
 

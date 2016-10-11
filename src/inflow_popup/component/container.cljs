@@ -1,19 +1,15 @@
 
-(ns respo-inflow-pop.component.container
+(ns inflow-popup.component.container
   (:require [hsl.core :refer [hsl]]
             [respo.alias :refer [create-comp div span]]
-            [respo.component.text :refer [comp-text]]
-            [respo.component.debug :refer [comp-debug]]
-            [respo-inflow-pop.component.dialog :refer [comp-dialog]]
-            [respo-inflow-pop.component.dropdown :refer [comp-dropdown]]
-            [respo-inflow-pop.style.widget :as widget]
-            [respo-inflow-pop.style.layout :as layout]
-            [respo-inflow-pop.style.typeset :as typeset]
-            [respo-inflow-pop.style.decoration :as decoration]))
-
-(def example-data ["Clojure" "PureScript" "Flow by Facebook" "Elm"])
-
-(defn init-state [store] {:selected (first example-data), :show? false})
+            [respo.comp.text :refer [comp-text]]
+            [respo.comp.debug :refer [comp-debug]]
+            [inflow-popup.component.dialog :refer [comp-dialog]]
+            [inflow-popup.component.dropdown :refer [comp-dropdown]]
+            [inflow-popup.style.widget :as widget]
+            [inflow-popup.style.layout :as layout]
+            [inflow-popup.style.typeset :as typeset]
+            [inflow-popup.style.decoration :as decoration]))
 
 (defn update-state [state op op-data]
   (case
@@ -28,8 +24,12 @@
 
 (defn on-close [mutate!] (fn [] (mutate! :show?)))
 
+(def example-data ["Clojure" "PureScript" "Flow by Facebook" "Elm"])
+
 (defn on-select [mutate!]
   (fn [next-item] (mutate! :selected next-item)))
+
+(defn init-state [store] {:selected (first example-data), :show? false})
 
 (defn render [store]
   (fn [state mutate!]

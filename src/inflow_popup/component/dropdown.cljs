@@ -1,14 +1,27 @@
 
-(ns respo-inflow-pop.component.dropdown
+(ns inflow-popup.component.dropdown
   (:require [hsl.core :refer [hsl]]
             [respo.alias :refer [create-comp div span style]]
-            [respo.component.text :refer [comp-text]]
-            [respo-inflow-pop.style.layout :as layout]
-            [respo-inflow-pop.style.widget :as widget]))
+            [respo.comp.text :refer [comp-text]]
+            [inflow-popup.style.layout :as layout]
+            [inflow-popup.style.widget :as widget]))
 
-(defn init-state [& args] false)
+(defn on-toggle [mutate!] (fn [e dispatch!] (mutate!)))
+
+(defn on-item-click [on-select item on-toggle]
+  (fn [e dispatch!] (on-select item) (on-toggle)))
+
+(def style-icon {:font-size "10px", :width "32px"})
 
 (defn update-state [state] (not state))
+
+(def style-menu
+ {:box-shadow (str "0 0 4px " (hsl 0 0 0 0.4)),
+  :color (hsl 0 0 40),
+  :top "34px",
+  :width "100%",
+  :right 0,
+  :position "absolute"})
 
 (def style-button
  {:line-height "32px",
@@ -20,29 +33,6 @@
   :position "relative",
   :height "32px"})
 
-(def style-text
- {:text-overflow "ellipsis",
-  :text-align "center",
-  :white-space "nowrap",
-  :overflow "hidden",
-  :width "120px",
-  :padding "0 8px",
-  :display "inline-block"})
-
-(def style-divider {:background-color (hsl 0 0 100 0.5), :width "1px"})
-
-(def style-icon {:font-size "10px", :width "32px"})
-
-(def style-menu
- {:box-shadow (str "0 0 4px " (hsl 0 0 0 0.4)),
-  :color (hsl 0 0 40),
-  :top "34px",
-  :width "100%",
-  :right 0,
-  :position "absolute"})
-
-(def style-item {:padding "0 8px"})
-
 (def item-hover-style
  (style
    {:attrs
@@ -53,10 +43,20 @@
        (hsl 0 0 60 0.1)
        "}")}}))
 
-(defn on-toggle [mutate!] (fn [e dispatch!] (mutate!)))
+(defn init-state [& args] false)
 
-(defn on-item-click [on-select item on-toggle]
-  (fn [e dispatch!] (on-select item) (on-toggle)))
+(def style-divider {:background-color (hsl 0 0 100 0.5), :width "1px"})
+
+(def style-text
+ {:text-overflow "ellipsis",
+  :text-align "center",
+  :white-space "nowrap",
+  :overflow "hidden",
+  :width "120px",
+  :padding "0 8px",
+  :display "inline-block"})
+
+(def style-item {:padding "0 8px"})
 
 (defn render [candidates current on-select]
   (fn [state mutate!]

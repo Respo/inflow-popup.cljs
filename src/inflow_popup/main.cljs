@@ -1,14 +1,14 @@
 
-(ns respo-inflow-pop.main
+(ns inflow-popup.main
   (:require [respo.core :refer [render! clear-cache!]]
-            [respo-inflow-pop.component.container :refer [comp-container]]
+            [inflow-popup.component.container :refer [comp-container]]
             [cljs.reader :refer [read-string]]))
+
+(defn dispatch! [op op-data])
 
 (defonce store-ref (atom {}))
 
 (defonce states-ref (atom {}))
-
-(defn dispatch! [op op-data])
 
 (defn render-app! []
   (let [target (.querySelector js/document "#app")]
@@ -30,9 +30,9 @@
            (println "resigtered:" registration.scope)))
        (.catch (fn [error] (println "failed:" error)))))))
 
-(set! js/window.onload -main)
-
-(defn on-jsload []
+(defn on-jsload! []
   (clear-cache!)
   (render-app!)
   (println "code updated."))
+
+(set! js/window.onload -main)

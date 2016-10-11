@@ -1,6 +1,8 @@
 
-(ns respo-inflow-pop.style.widget
+(ns inflow-popup.style.widget
   (:require [hsl.core :refer [hsl]]))
+
+(def card {:background-color (hsl 0 0 100), :padding "16px"})
 
 (def button
  {:line-height 2,
@@ -10,5 +12,3 @@
   :cursor "pointer",
   :padding "0 8px",
   :display "inline-block"})
-
-(def card {:background-color (hsl 0 0 100), :padding "16px"})

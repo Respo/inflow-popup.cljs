@@ -1,38 +1,31 @@
 
 (set-env!
- :dependencies '[[org.clojure/clojurescript "1.9.89"      :scope "test"]
+ :dependencies '[[org.clojure/clojurescript "1.9.216"     :scope "test"]
                  [org.clojure/clojure       "1.8.0"       :scope "test"]
                  [adzerk/boot-cljs          "1.7.228-1"   :scope "test"]
-                 [adzerk/boot-reload        "0.4.11"      :scope "test"]
-                 [cirru/boot-cirru-sepal    "0.1.9"       :scope "test"]
-                 [adzerk/boot-test          "1.1.1"       :scope "test"]
+                 [adzerk/boot-reload        "0.4.12"      :scope "test"]
+                 [cirru/boot-stack-server   "0.1.13"      :scope "test"]
+                 [adzerk/boot-test          "1.1.2"       :scope "test"]
                  [mvc-works/hsl             "0.1.2"]
-                 [mvc-works/respo           "0.3.7"]])
+                 [respo                     "0.3.25"]])
 
 (require '[adzerk.boot-cljs   :refer [cljs]]
          '[adzerk.boot-reload :refer [reload]]
-         '[cirru-sepal.core   :refer [transform-cirru]]
+         '[stack-server.core  :refer [start-stack-editor! transform-stack]]
          '[respo.alias        :refer [html head title script style meta' div link body]]
-         '[respo.render.static-html :refer [make-html]]
+         '[respo.render.html  :refer [make-html]]
          '[adzerk.boot-test   :refer :all]
          '[clojure.java.io    :as    io])
 
 (def +version+ "0.1.0")
 
 (task-options!
-  pom {:project     'respo/inflow-pop
+  pom {:project     'respo/inflow-popup
        :version     +version+
-       :description "Pop component for Respo"
-       :url         "https://github.com/respo-mvc/respo-inflow-pop"
-       :scm         {:url "https://github.com/respo-mvc/respo-inflow-pop"}
+       :description "Local popup component for Respo"
+       :url         "https://github.com/Respo/inflow-popup"
+       :scm         {:url "https://github.com/Respo/inflow-popup"}
        :license     {"MIT" "http://opensource.org/licenses/mit-license.php"}})
-
-(deftask compile-cirru []
-  (set-env!
-    :source-paths #{"cirru/"})
-  (comp
-    (transform-cirru)
-    (target :dir #{"compiled/"})))
 
 (def icons-css "http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css")
 (defn use-text [x] {:attrs {:innerHTML x}})
@@ -41,12 +34,11 @@
     (html {}
     (head {}
       (title (use-text "Inflow pop"))
-      (link {:attrs {:rel "icon" :type "image/png" :href "mvc-works-192x192.png"}})
+      (link {:attrs {:rel "icon" :type "image/png" :href "http://logo.respo.site/respo.png"}})
       (link {:attrs {:rel "stylesheet" :href icons-css}})
-      (if (:build? data)
-        (link (:attrs {:rel "manifest" :href "manifest.json"})))
-      (meta'{:attrs {:charset "utf-8"}})
+      (meta' {:attrs {:charset "utf-8"}})
       (meta' {:attrs {:name "viewport" :content "width=device-width, initial-scale=1"}})
+      (meta' {:attrs {:id "ssr-stages" :content "#{}"}})
       (style (use-text "body {margin: 0;}"))
       (style (use-text "body * {box-sizing: border-box;}"))
       (script {:attrs {:id "config" :type "text/edn" :innerHTML (pr-str data)}}))
@@ -59,61 +51,49 @@
   [d data VAL edn "data piece for rendering"]
   (with-pre-wrap fileset
     (let [tmp (tmp-dir!)
-          out (io/file tmp "index.html")]
+          out (io/file tmp "dev.html")]
       (empty-dir! tmp)
       (spit out (html-dsl data fileset))
       (-> fileset
         (add-resource tmp)
         (commit!)))))
 
-(deftask dev []
+(deftask dev! []
   (set-env!
-    :asset-paths #{"assets"}
-    :source-paths #{"cirru/src"})
+    :asset-paths #{"assets"})
   (comp
+    (repl)
+    (start-stack-editor!)
+    (target :dir #{"src/"})
     (html-file :data {:build? false})
-    (watch)
-    (transform-cirru)
-    (reload :on-jsload 'respo-inflow-pop.main/on-jsload
+    (reload :on-jsload 'inflow-popup.main/on-jsload!
             :cljs-asset-path ".")
-    (cljs)
+    (cljs :compiler-options {:language-in :ecmascript5})
     (target)))
 
-(deftask build-simple []
-  (set-env!
-    :asset-paths #{"assets"}
-    :source-paths #{"cirru/src"})
+(deftask generate-code []
   (comp
-    (transform-cirru)
-    (cljs :optimizations :simple)
-    (html-file :data {:build? false})
-    (target)))
+    (transform-stack :filename "stack-sepal.ir")
+    (target :dir #{"src/"})))
 
 (deftask build-advanced []
   (set-env!
-    :asset-paths #{"assets"}
-    :source-paths #{"cirru/src"})
+    :asset-paths #{"assets"})
   (comp
-    (transform-cirru)
-    (cljs :optimizations :advanced)
+    (transform-stack :filename "stack-sepal.ir")
+    (cljs :optimizations :advanced
+          :compiler-options {:language-in :ecmascript5})
     (html-file :data {:build? true})
     (target)))
 
 (deftask rsync []
   (with-pre-wrap fileset
-    (sh "rsync" "-r" "target/" "tiye.me:repo/respo-mvc/inflow-pop" "--exclude" "main.out" "--delete")
+    (sh "rsync" "-r" "target/" "respo.site:repo/Respo/inflow-popup" "--exclude" "main.out" "--delete")
     fileset))
 
-(deftask send-tiye []
-  (comp
-    (build-simple)
-    (rsync)))
-
 (deftask build []
-  (set-env!
-    :source-paths #{"cirru/src"})
   (comp
-    (transform-cirru)
+    (transform-stack :filename "stack-sepal.ir")
     (pom)
     (jar)
     (install)
@@ -128,8 +108,7 @@
 
 (deftask watch-test []
   (set-env!
-    :source-paths #{"cirru/src" "cirru/test"})
+    :source-paths #{"src" "test"})
   (comp
     (watch)
-    (transform-cirru)
-    (test :namespaces '#{boot-workflow.test})))
+    (test :namespaces '#{inflow-popup.test})))

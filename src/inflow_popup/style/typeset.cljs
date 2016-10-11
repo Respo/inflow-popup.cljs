@@ -1,5 +1,5 @@
 
-(ns respo-inflow-pop.style.typeset)
+(ns inflow-popup.style.typeset)
 
 (def page-default
  {:line-height "2",

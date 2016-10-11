@@ -1,10 +1,10 @@
 
-Respo Inflow Pop
+Respo Inflow Popup
 ----
 
 > Pop UI component for Respo apps
 
-Demo http://repo.tiye.me/respo-mvc/inflow-pop/
+Demo http://repo.respo.site/inflow-popup/
 
 ### Icons
 

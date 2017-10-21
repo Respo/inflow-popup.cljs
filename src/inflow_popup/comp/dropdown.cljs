@@ -1,91 +1,73 @@
 
 (ns inflow-popup.comp.dropdown
+  (:require-macros [respo.macros :refer [defcomp cursor-> <> div span style]])
   (:require [hsl.core :refer [hsl]]
-            [respo.alias :refer [create-comp div span style]]
-            [respo.comp.text :refer [comp-text]]
+            [respo.core :refer [create-comp]]
             [inflow-popup.style.layout :as layout]
             [inflow-popup.style.widget :as widget]))
 
-(defn on-toggle [mutate!] (fn [e dispatch!] (mutate!)))
-
-(defn on-item-click [on-select item on-toggle]
-  (fn [e dispatch!] (on-select item) (on-toggle)))
-
-(def style-icon {:font-size "10px", :width "32px"})
-
-(defn update-state [state] (not state))
+(def style-icon {:width "32px", :font-size "10px"})
 
 (def style-menu
- {:box-shadow (str "0 0 4px " (hsl 0 0 0 0.4)),
-  :color (hsl 0 0 40),
-  :top "34px",
-  :width "100%",
-  :right 0,
-  :position "absolute"})
+  {:position "absolute",
+   :right 0,
+   :top "34px",
+   :box-shadow (str "0 0 4px " (hsl 0 0 0 0.4)),
+   :width "100%",
+   :color (hsl 0 0 40)})
 
 (def style-button
- {:line-height "32px",
-  :align-items "stretch",
-  :color (hsl 0 0 100),
-  :font-size "14px",
-  :background-color (hsl 200 80 60),
-  :cursor "pointer",
-  :position "relative",
-  :height "32px"})
+  {:height "32px",
+   :line-height "32px",
+   :background-color (hsl 200 80 60),
+   :color (hsl 0 0 100),
+   :align-items "stretch",
+   :cursor "pointer",
+   :font-size "14px",
+   :position "relative"})
 
 (def item-hover-style
- (style
-   {:attrs
-    {:innerHTML
-     (str
-       ".dropdown-item:hover{"
-       "background-color:"
-       (hsl 0 0 60 0.1)
-       "}")}}))
+  (style
+   {:attrs {:innerHTML (str
+                        ".dropdown-item:hover{"
+                        "background-color:"
+                        (hsl 0 0 60 0.1)
+                        "}")}}))
 
-(defn init-state [& args] false)
-
-(def style-divider {:background-color (hsl 0 0 100 0.5), :width "1px"})
+(def style-divider {:width "1px", :background-color (hsl 0 0 100 0.5)})
 
 (def style-text
- {:text-overflow "ellipsis",
-  :text-align "center",
-  :white-space "nowrap",
-  :overflow "hidden",
-  :width "120px",
-  :padding "0 8px",
-  :display "inline-block"})
+  {:width "120px",
+   :display "inline-block",
+   :padding "0 8px",
+   :text-align "center",
+   :white-space "nowrap",
+   :overflow "hidden",
+   :text-overflow "ellipsis"})
 
 (def style-item {:padding "0 8px"})
 
-(defn render [candidates current on-select]
-  (fn [state mutate!]
+(defcomp
+ comp-dropdown
+ (states candidates current on-select)
+ (let [state (if (some? (:data states)) (:data states) false)]
+   (div
+    {:style (merge layout/row style-button), :on {:click (fn [e d! m!] (m! (not state)))}}
+    (<> span current (merge layout/flex style-text))
+    (div {:style style-divider})
     (div
-      {:style (merge layout/row style-button),
-       :event {:click (on-toggle mutate!)}}
-      (comp-text current (merge layout/flex style-text))
-      (div {:style style-divider})
+     {:style (merge layout/hold-center style-icon)}
+     (span {:class-name "ion-arrow-down-b"}))
+    (if state
       (div
-        {:style (merge layout/hold-center style-icon)}
-        (span {:attrs {:class-name "ion-arrow-down-b"}}))
-      (if state
-        (div
-          {:style style-menu}
-          (->>
-            candidates
+       {:style style-menu}
+       (->> candidates
             (map
-              (fn [item] [item
-                          (div
-                            {:style style-item,
-                             :event
-                             {:click
-                              (on-item-click
-                                on-select
-                                item
-                                (on-toggle mutate!))},
-                             :attrs {:class-name "dropdown-item"}}
-                            (comp-text item nil))])))))
-      (if state item-hover-style))))
-
-(def comp-dropdown
- (create-comp :dropdown init-state update-state render))
+             (fn [item]
+               [item
+                (div
+                 {:class-name "dropdown-item",
+                  :style style-item,
+                  :on {:click (fn [e d! m!] (on-select item m!) (m! (not state)))}}
+                 (<> item))])))))
+    (if state item-hover-style))))

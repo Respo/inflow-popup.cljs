@@ -20,7 +20,7 @@ http://ionicons.com/
 
 ### Develop
 
-https://github.com/mvc-works/boot-workflow
+https://github.com/mvc-works/coworkflow
 
 ### License
 

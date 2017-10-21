@@ -1,60 +1,48 @@
 
 (ns inflow-popup.comp.container
+  (:require-macros [respo.macros :refer [defcomp cursor-> <> div input span]])
   (:require [hsl.core :refer [hsl]]
-            [respo.alias :refer [create-comp div span]]
-            [respo.comp.text :refer [comp-text]]
-            [respo.comp.debug :refer [comp-debug]]
+            [respo.core :refer [create-comp]]
+            [respo.comp.inspect :refer [comp-inspect]]
             [inflow-popup.comp.dialog :refer [comp-dialog]]
             [inflow-popup.comp.dropdown :refer [comp-dropdown]]
             [inflow-popup.style.widget :as widget]
             [inflow-popup.style.layout :as layout]
             [inflow-popup.style.typeset :as typeset]
-            [inflow-popup.style.decoration :as decoration]))
+            [inflow-popup.style.decoration :as decoration]
+            [reel.comp.reel :refer [comp-reel]]))
 
-(defn update-state [state op op-data]
-  (case
-    op
-    :show?
-    (update state :show? not)
-    :selected
-    (assoc state :selected op-data)
-    state))
-
-(defn on-click [mutate!] (fn [e dispatch!] (mutate! :show?)))
+(def example-data ["Clojure" "PureScript" "Reason" "Elm" "Haskell"])
 
 (defn on-close [mutate!] (fn [] (mutate! :show?)))
 
-(def example-data ["Clojure" "PureScript" "Flow by Facebook" "Elm"])
+(defn on-click [state] (fn [e d! m!] (m! (update state :show? not))))
 
-(defn on-select [mutate!]
-  (fn [next-item] (mutate! :selected next-item)))
+(def initial-state {:show? false, :selected (first example-data)})
 
-(defn init-state [store] {:selected (first example-data), :show? false})
-
-(defn render [store]
-  (fn [state mutate!]
+(defcomp
+ comp-container
+ (reel)
+ (let [store (:store reel), states (:states store), state (or (:data states) initial-state)]
+   (div
+    {:style (merge widget/card typeset/page-default)}
     (div
-      {:style (merge widget/card typeset/page-default)}
-      (div
-        {:style (merge layout/row widget/card)}
-        (div {:style layout/field-area} (comp-text "a dialog" nil))
-        (div
-          {}
-          (div
-            {:style widget/button, :event {:click (on-click mutate!)}}
-            (comp-text "Toggle" nil)))
-        (if (:show? state)
-          (comp-dialog
-            (on-close mutate!)
-            (div {} (comp-text "Inside" nil)))))
-      (div
-        {:style (merge layout/row widget/card)}
-        (div {:style layout/field-area} (comp-text "a droplist" nil))
-        (comp-dropdown
-          example-data
-          (:selected state)
-          (on-select mutate!)))
-      (comp-debug state nil))))
-
-(def comp-container
- (create-comp :container init-state update-state render))
+     {:style (merge layout/row widget/card)}
+     (div {:style layout/field-area} (<> "a dialog"))
+     (div {:style widget/button, :event {:click (on-click state)}} (<> "Toggle"))
+     (if (:show? state)
+       (comp-dialog
+        (fn [mutate!] (mutate! *cursor* (update state :show? not)))
+        (div {} (<> "Inside")))))
+    (div
+     {:style (merge layout/row widget/card)}
+     (div {:style layout/field-area} (<> "a droplist"))
+     (cursor->
+      :dropdown
+      comp-dropdown
+      states
+      example-data
+      (:selected state)
+      (fn [next-item m!] (m! *cursor* (assoc state :selected next-item)))))
+    (comp-inspect state nil)
+    (comp-reel reel {}))))

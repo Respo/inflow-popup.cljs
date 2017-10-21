@@ -1,38 +1,40 @@
 
 (ns inflow-popup.main
-  (:require [respo.core :refer [render! clear-cache!]]
+  (:require [respo.core :refer [render! clear-cache! realize-ssr!]]
             [inflow-popup.comp.container :refer [comp-container]]
-            [cljs.reader :refer [read-string]]))
+            [inflow-popup.updater :refer [updater]]
+            [inflow-popup.schema :as schema]
+            [reel.util :refer [id!]]
+            [reel.schema :as reel-schema]
+            [reel.core :refer [reel-updater refresh-reel listen-devtools!]]))
 
-(defn dispatch! [op op-data])
+(defonce *reel
+  (atom
+   (-> reel-schema/reel
+       (assoc :base schema/store)
+       (assoc :store schema/store)
+       (assoc :display? false))))
 
-(defonce store-ref (atom {}))
+(defn dispatch! [op op-data]
+  (let [op-id (id!), next-reel (reel-updater updater @*reel op op-data op-id)]
+    (reset! *reel next-reel)))
 
-(defonce states-ref (atom {}))
+(def mount-target (.querySelector js/document ".app"))
 
-(defn render-app! []
-  (let [target (.querySelector js/document "#app")]
-    (render! (comp-container @store-ref) target dispatch! states-ref)))
+(defn render-app! [renderer] (renderer mount-target (comp-container @*reel) dispatch!))
 
-(defn -main []
-  (enable-console-print!)
-  (render-app!)
-  (add-watch store-ref :changes render-app!)
-  (add-watch states-ref :changes render-app!)
-  (println "app started!")
-  (let [configEl (.querySelector js/document "#config")
-        config (read-string (.-innerHTML configEl))]
-    (if (and (some? navigator.serviceWorker) (:build? config))
-      (-> navigator.serviceWorker
-       (.register "./sw.js")
-       (.then
-         (fn [registration]
-           (println "resigtered:" registration.scope)))
-       (.catch (fn [error] (println "failed:" error)))))))
+(def ssr? (some? (js/document.querySelector "meta.respo-ssr")))
 
-(defn on-jsload! []
+(defn main! []
+  (if ssr? (render-app! realize-ssr!))
+  (render-app! render!)
+  (add-watch *reel :changes (fn [] (render-app! render!)))
+  (listen-devtools! "a" dispatch!)
+  (println "App started!"))
+
+(defn reload! []
   (clear-cache!)
-  (render-app!)
+  (reset! *reel (refresh-reel @*reel schema/store updater))
   (println "code updated."))
 
-(set! js/window.onload -main)
+(set! js/window.onload main!)

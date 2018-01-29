@@ -1,7 +1,6 @@
 
 (ns inflow-popup.comp.dialog
-  (:require-macros [respo.macros :refer [defcomp cursor-> <> div span]])
-  (:require [respo.core :refer [create-comp]]
+  (:require [respo.macros :refer [defcomp cursor-> <> div span]]
             [inflow-popup.style.layout :as layout]
             [inflow-popup.style.widget :as widget]
             [inflow-popup.style.decoration :as decoration]))
@@ -13,5 +12,5 @@
  (on-close element-inside)
  (div
   {:style (merge layout/float-fullscreen decoration/dim layout/hold-center {:z-index 100}),
-   :event {:click (fn [e d! m!] (on-close m!))}}
-  (div {:event {:click on-focus}, :style widget/card} element-inside)))
+   :on-click (fn [e d! m!] (on-close m!))}
+  (div {:on-click on-focus, :style widget/card} element-inside)))

@@ -11,7 +11,7 @@ It's like local dropdown menu component in React.js .
 
 ### Develop
 
-https://github.com/mvc-works/coworkflow
+https://github.com/mvc-works/calcit-workflow
 
 ### License
 

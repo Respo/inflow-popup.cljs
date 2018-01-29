@@ -11,14 +11,14 @@
 
 (def flex {:flex 1})
 
+(def float-fullscreen {:position "fixed", :width "100%", :height "100%", :top 0, :left 0})
+
 (def hold-center
   {:display "flex",
    :flex-direction "column",
    :justify-content "center",
    :align-items "center",
    :overflow "auto"})
-
-(def float-fullscreen {:position "fixed", :width "100%", :height "100%", :top 0, :left 0})
 
 (def row
   {:display "flex",

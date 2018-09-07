@@ -1,41 +1,44 @@
 
-(ns inflow-popup.render
+(ns inflow-popup.page
   (:require [respo.render.html :refer [make-string]]
             [shell-page.core :refer [make-page spit slurp]]
             [inflow-popup.comp.container :refer [comp-container]]
             [inflow-popup.schema :as schema]
             [reel.schema :as reel-schema]
-            [cljs.reader :refer [read-string]]))
+            [cljs.reader :refer [read-string]]
+            [inflow-popup.config :as config]
+            [inflow-popup.util :refer [get-env!]]))
 
 (def base-info
-  {:title "Inflow pop",
-   :icon "http://cdn.tiye.me/logo/respo.png",
-   :inline-styles [(slurp "./entry/main.css")]})
+  {:title (:title config/site), :icon (:icon config/site), :ssr nil, :inline-html nil})
 
 (defn dev-page []
   (make-page
    ""
    (merge
     base-info
-    {:styles ["http://localhost:8100/main.css"], :scripts ["/lib.js" "/main.js"]})))
+    {:styles ["/entry/main.css" (:dev-ui config/site)],
+     :scripts ["/client.js"],
+     :inline-styles []})))
 
-(def preview? (= "preview" js/process.env.prod))
+(def local-bundle? (= "local-bundle" (get-env! "mode")))
 
 (defn prod-page []
   (let [reel (-> reel-schema/reel (assoc :base schema/store) (assoc :store schema/store))
         html-content (make-string (comp-container reel))
         assets (read-string (slurp "dist/assets.edn"))
-        cdn (if preview? "" "http://cdn.tiye.me/inflow-popup/")
+        cdn (if local-bundle? "" (:cdn-url config/site))
         prefix-cdn (fn [x] (str cdn x))]
     (make-page
      html-content
      (merge
       base-info
-      {:styles ["http://cdn.tiye.me/favored-fonts/main.css"],
+      {:styles [(:release-ui config/site)],
        :scripts (map #(-> % :output-name prefix-cdn) assets),
-       :ssr "respo-ssr"}))))
+       :ssr "respo-ssr",
+       :inline-styles [(slurp "./entry/main.css")]}))))
 
 (defn main! []
-  (if (= js/process.env.env "dev")
-    (spit "target/index.html" (dev-page))
-    (spit "dist/index.html" (prod-page))))
+  (if (contains? config/bundle-builds (get-env! "mode"))
+    (spit "dist/index.html" (prod-page))
+    (spit "target/index.html" (dev-page))))

@@ -1,4 +1,10 @@
 
+(def config {:clojars-user "jiyinyiyong"
+             :package 'respo/inflow-popup
+             :version "0.2.1"
+             :github-url "https://github.com/Respo/inflow-popup"
+             :description "Local popup component for Respo"})
+
 (defn read-password [guide]
   (String/valueOf (.readPassword (System/console) guide nil)))
 
@@ -6,18 +12,16 @@
   :resource-paths #{"src"}
   :dependencies '[]
   :repositories #(conj % ["clojars" {:url "https://clojars.org/repo/"
-                                     :username "jiyinyiyong"
+                                     :username (:clojars-user config)
                                      :password (read-password "Clojars password: ")}]))
-
-(def +version+ "0.2.1")
 
 (deftask deploy []
   (comp
-    (pom :project     'respo/inflow-popup
-         :version     +version+
-         :description "Local popup component for Respo"
-         :url         "https://github.com/Respo/inflow-popup"
-         :scm         {:url "https://github.com/Respo/inflow-popup"}
+    (pom :project     (:package config)
+         :version     (:version config)
+         :description (:description config)
+         :url         (:github-url config)
+         :scm         {:url (:github-url config)}
          :license     {"MIT" "http://opensource.org/licenses/mit-license.php"})
     (jar)
     (install)

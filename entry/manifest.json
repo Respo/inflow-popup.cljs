@@ -1,9 +1,9 @@
 {
-  "short_name": "CoWorkflow",
-  "name": "CoWorkflow",
+  "short_name": "Inflow popup",
+  "name": "Popup",
   "icons": [
     {
-      "src": "http://cdn.tiye.me/logo/Respo.png",
+      "src": "http://cdn.tiye.me/logo/respo.png",
       "sizes": "320x320"
     }
   ],

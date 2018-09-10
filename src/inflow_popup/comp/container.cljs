@@ -3,7 +3,7 @@
   (:require [hsl.core :refer [hsl]]
             [respo.macros :refer [defcomp cursor-> <> div input span]]
             [respo.comp.inspect :refer [comp-inspect]]
-            [inflow-popup.comp.dialog :refer [comp-dialog]]
+            [inflow-popup.comp.dialog :refer [comp-dialog comp-menu-dialog]]
             [inflow-popup.comp.dropdown :refer [comp-dropdown]]
             [inflow-popup.style.widget :as widget]
             [inflow-popup.style.layout :as layout]
@@ -13,7 +13,7 @@
 
 (def example-data ["Clojure" "PureScript" "Reason" "Elm" "Haskell"])
 
-(def initial-state {:show? false, :selected (first example-data)})
+(def initial-state {:show? false, :selected (first example-data), :show-menu? false})
 
 (defn on-click [state] (fn [e d! m!] (m! (update state :show? not))))
 
@@ -41,6 +41,17 @@
       example-data
       (:selected state)
       (fn [next-item m!] (m! %cursor (assoc state :selected next-item)))))
+    (div
+     {:style (merge layout/row widget/card)}
+     (div {:style layout/field-area} (<> "a dialog"))
+     (div
+      {:style widget/button, :on-click (fn [e d! m!] (m! (update state :show-menu? not)))}
+      (<> "Toggle"))
+     (if (:show-menu? state)
+       (comp-menu-dialog
+        (fn [result d! m!] (println "result" result))
+        (fn [mutate!] (mutate! %cursor (update state :show-menu? not)))
+        {:haskell "Haskell", :clojure "Clojure"})))
     (comp-inspect "state" state nil)
     (cursor-> :reel comp-reel states reel {}))))
 

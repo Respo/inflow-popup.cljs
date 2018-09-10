@@ -1,7 +1,7 @@
 
 (def config {:clojars-user "jiyinyiyong"
              :package 'respo/inflow-popup
-             :version "0.2.1"
+             :version "0.2.2"
              :github-url "https://github.com/Respo/inflow-popup"
              :description "Local popup component for Respo"})
 

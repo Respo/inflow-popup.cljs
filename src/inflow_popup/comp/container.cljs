@@ -43,7 +43,7 @@
       (fn [next-item m!] (m! %cursor (assoc state :selected next-item)))))
     (div
      {:style (merge layout/row widget/card)}
-     (div {:style layout/field-area} (<> "a dialog"))
+     (div {:style layout/field-area} (<> "a menu dialog"))
      (div
       {:style widget/button, :on-click (fn [e d! m!] (m! (update state :show-menu? not)))}
       (<> "Toggle"))

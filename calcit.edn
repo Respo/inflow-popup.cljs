@@ -539,7 +539,7 @@
                 :type :expr, :by "root", :at 1536601546352, :id "PClGxRHYJ9H"
                 :data {
                  "T" {:type :leaf, :by "root", :at 1536601546352, :text "<>", :id "DszE7dR2Ii8"}
-                 "j" {:type :leaf, :by "root", :at 1536601546352, :text "|a dialog", :id "MMPSQnH78Rj"}
+                 "j" {:type :leaf, :by "imwP13eT1", :at 1536633211301, :text "|a menu dialog", :id "MMPSQnH78Rj"}
                 }
                }
               }
@@ -2135,6 +2135,13 @@
              "v" {:type :leaf, :id "SJzAJ3D4dpW", :text "40", :by "root", :at 1508554663191}
             }
            }
+          }
+         }
+         "yj" {
+          :type :expr, :by "imwP13eT1", :at 1536633167269, :id "ndt8IOBvro"
+          :data {
+           "T" {:type :leaf, :by "imwP13eT1", :at 1536633174325, :text ":background-color", :id "ndt8IOBvroleaf"}
+           "j" {:type :leaf, :by "imwP13eT1", :at 1536633175233, :text ":white", :id "q3VXWSvMqV"}
           }
          }
         }
@@ -4162,6 +4169,7 @@
  }
  :sessions {}
  :users {
+  "imwP13eT1" {:name "chen", :id "imwP13eT1", :nickname "chen", :avatar nil, :password "d41d8cd98f00b204e9800998ecf8427e", :theme :star-trail}
   "root" {:id "root", :name "root", :nickname "root", :password "d41d8cd98f00b204e9800998ecf8427e", :avatar nil, :theme :star-trail}
  }
  :saved-files {}

@@ -9,7 +9,7 @@ Demo http://repo.respo.site/inflow-popup/
 [![Clojars Project](https://img.shields.io/clojars/v/respo/inflow-popup.svg)](https://clojars.org/respo/inflow-popup)
 
 ```edn
-[respo/inflow-popup "0.2.2"]
+[respo/inflow-popup "0.2.3"]
 ```
 
 It's like local dropdown menu component in React.js .

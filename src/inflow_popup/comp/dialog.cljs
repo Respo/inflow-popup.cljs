@@ -17,6 +17,15 @@
    :on-click (fn [e d! m!] (on-close! m!))}
   (div {:on-click on-focus, :style widget/card} element-inside)))
 
+(def style-menu-item
+  {:border-bottom (str "1px solid " (hsl 0 0 90)),
+   :padding "0 16px",
+   :line-height "40px",
+   :min-width 240,
+   :max-width 400,
+   :cursor :pointer,
+   :white-space :nowrap})
+
 (defcomp
  comp-menu-dialog
  (on-choose! on-close! candidates)
@@ -46,11 +55,5 @@
             [idx
              (div
               {:on-click (fn [e d! m!] (on-choose! k d! m!) (on-close! m!)),
-               :style {:border-bottom (str "1px solid " (hsl 0 0 90)),
-                       :padding "0 16px",
-                       :line-height "40px",
-                       :min-width 240,
-                       :max-width 400,
-                       :cursor :pointer,
-                       :white-space :nowrap}}
-              (<> v))])))))))
+               :style style-menu-item}
+              (if (string? v) (<> v) v))])))))))

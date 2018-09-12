@@ -51,7 +51,12 @@
        (comp-menu-dialog
         (fn [result d! m!] (println "result" result))
         (fn [mutate!] (mutate! %cursor (update state :show-menu? not)))
-        {:haskell "Haskell", :clojure "Clojure"})))
+        {:haskell "Haskell",
+         :clojure "Clojure",
+         :elixir (div
+                  {:style {}}
+                  (div {} (<> "Elixir"))
+                  (div {} (<> "...with an extra line")))})))
     (comp-inspect "state" state nil)
     (cursor-> :reel comp-reel states reel {}))))
 

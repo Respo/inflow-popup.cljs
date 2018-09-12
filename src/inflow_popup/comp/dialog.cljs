@@ -4,7 +4,8 @@
             [inflow-popup.style.layout :as layout]
             [inflow-popup.style.widget :as widget]
             [inflow-popup.style.decoration :as decoration]
-            [hsl.core :refer [hsl]]))
+            [hsl.core :refer [hsl]]
+            [respo-ui.core :as ui]))
 
 (defn on-focus [e dispatch! mutate!] )
 
@@ -25,23 +26,31 @@
  (div
   {:style (merge layout/float-fullscreen decoration/dim layout/hold-center {:z-index 100}),
    :on-click (fn [e d! m!] (on-close! m!))}
-  (list->
-   {:on-click on-focus,
-    :style {:background-color (hsl 0 0 100),
-            :padding "16px 0",
-            :max-height 600,
-            :overflow :auto}}
-   (->> candidates
-        (map-indexed
-         (fn [idx [k v]]
-           [idx
-            (div
-             {:on-click (fn [e d! m!] (on-choose! k d! m!) (on-close! m!)),
-              :style {:border-bottom (str "1px solid " (hsl 0 0 90)),
-                      :padding "0 16px",
-                      :line-height "32px",
-                      :min-width 200,
-                      :max-width 400,
-                      :cursor :pointer,
-                      :white-space :nowrap}}
-             (<> v))]))))))
+  (div
+   {:style {:background-color :white}}
+   (div
+    {:style {:font-family ui/font-fancy,
+             :padding "0 16px",
+             :color (hsl 0 0 60),
+             :line-height "40px"}}
+    (<> "Select an item:"))
+   (list->
+    {:on-click on-focus,
+     :style {:padding 0,
+             :max-height 600,
+             :overflow :auto,
+             :border-top (str "1px solid " (hsl 0 0 90))}}
+    (->> candidates
+         (map-indexed
+          (fn [idx [k v]]
+            [idx
+             (div
+              {:on-click (fn [e d! m!] (on-choose! k d! m!) (on-close! m!)),
+               :style {:border-bottom (str "1px solid " (hsl 0 0 90)),
+                       :padding "0 16px",
+                       :line-height "40px",
+                       :min-width 240,
+                       :max-width 400,
+                       :cursor :pointer,
+                       :white-space :nowrap}}
+              (<> v))])))))))

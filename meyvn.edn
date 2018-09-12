@@ -1,6 +1,6 @@
 {:pom {:group-id "respo",
        :artifact-id "inflow-popup",
-       :version "0.2.3-2",
+       :version "0.2.4",
        :name "Local popup component for Respo"}
  :packaging {:jar {:enabled true
                    :remote-repository {:id "clojars"

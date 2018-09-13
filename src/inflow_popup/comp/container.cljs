@@ -49,8 +49,9 @@
       (<> "Toggle"))
      (if (:show-menu? state)
        (comp-menu-dialog
-        (fn [result d! m!] (println "result" result))
-        (fn [mutate!] (mutate! %cursor (update state :show-menu? not)))
+        (fn [result d! m!]
+          (println "result" result)
+          (m! %cursor (update state :show-menu? not)))
         {:haskell "Haskell",
          :clojure "Clojure",
          :elixir (div

@@ -28,13 +28,12 @@
 
 (defcomp
  comp-menu-dialog
- (on-choose! on-close! candidates)
+ (on-choose! candidates)
  (assert (fn? on-choose!) "on-choose! should be a function!")
- (assert (fn? on-close!) "on-close! should be a function!")
  (assert (map? candidates) "candidates was supposed to be a map!")
  (div
   {:style (merge layout/float-fullscreen decoration/dim layout/hold-center {:z-index 100}),
-   :on-click (fn [e d! m!] (on-close! m!))}
+   :on-click (fn [e d! m!] (on-choose! nil d! m!))}
   (div
    {:style {:background-color :white}}
    (div
@@ -54,6 +53,5 @@
           (fn [idx [k v]]
             [idx
              (div
-              {:on-click (fn [e d! m!] (on-choose! k d! m!) (on-close! m!)),
-               :style style-menu-item}
+              {:on-click (fn [e d! m!] (on-choose! k d! m!)), :style style-menu-item}
               (if (string? v) (<> v) v))])))))))

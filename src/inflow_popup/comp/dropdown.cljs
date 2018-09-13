@@ -35,7 +35,8 @@
    :top "34px",
    :box-shadow (str "0 0 4px " (hsl 0 0 0 0.4)),
    :width "100%",
-   :color (hsl 0 0 40)})
+   :color (hsl 0 0 40),
+   :background-color :white})
 
 (def style-text
   {:width "120px",

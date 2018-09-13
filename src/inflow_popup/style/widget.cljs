@@ -10,4 +10,4 @@
    :color (hsl 0 0 100),
    :cursor "pointer"})
 
-(def card {:background-color (hsl 0 0 100), :padding "16px"})
+(def card {:background-color (hsl 0 0 100), :padding 16})

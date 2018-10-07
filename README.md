@@ -4,7 +4,7 @@ Respo Inflow Popup
 
 > Popup UI demo for Respo apps
 
-Demo http://repo.respo.site/inflow-popup/
+Demo http://repo.respo-mvc.org/inflow-popup/
 
 [![Clojars Project](https://img.shields.io/clojars/v/respo/inflow-popup.svg)](https://clojars.org/respo/inflow-popup)
 

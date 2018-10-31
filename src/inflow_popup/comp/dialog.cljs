@@ -1,6 +1,6 @@
 
 (ns inflow-popup.comp.dialog
-  (:require [respo.macros :refer [defcomp cursor-> list-> <> div span]]
+  (:require [respo.core :refer [defcomp cursor-> list-> <> div span]]
             [inflow-popup.style.layout :as layout]
             [inflow-popup.style.widget :as widget]
             [inflow-popup.style.decoration :as decoration]

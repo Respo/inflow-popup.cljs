@@ -1,18 +1,17 @@
 
 {:source-paths ["src" "cli"]
  :dependencies [[mvc-works/hsl          "0.1.2"]
-                [mvc-works/verbosely    "0.1.2"]
-                [mvc-works/shell-page   "0.1.8"]
-                [respo                  "0.8.20"]
-                [respo/ui               "0.3.7"]
-                [respo/value            "0.2.4"]
-                [respo/reel             "0.3.2"]]
+                [mvc-works/shell-page   "0.1.9"]
+                [respo                  "0.9.2"]
+                [respo/ui               "0.3.9"]
+                [respo/value            "0.2.5"]
+                [respo/reel             "0.3.4"]]
  :open-file-command ["subl" ["%s:%s:%s" :file :line :column]]
  :socket-repl {:port 0}
  :builds {:client {:target :browser
                    :output-dir "target/"
                    :asset-path "./"
-                   :modules {:client {:entries [inflow-popup.main]}}
+                   :modules {:client {:init-fn inflow-popup.main/main!}}
                    :devtools {:after-load inflow-popup.main/reload!
                               :http-root "target"
                               :http-port 7000

@@ -1,7 +1,7 @@
 
 (ns inflow-popup.comp.dropdown
   (:require [hsl.core :refer [hsl]]
-            [respo.macros :refer [defcomp cursor-> list-> <> div span style]]
+            [respo.core :refer [defcomp cursor-> list-> <> div span style]]
             [inflow-popup.style.layout :as layout]
             [inflow-popup.style.widget :as widget]))
 

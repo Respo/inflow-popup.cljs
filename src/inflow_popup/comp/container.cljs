@@ -1,7 +1,7 @@
 
 (ns inflow-popup.comp.container
   (:require [hsl.core :refer [hsl]]
-            [respo.macros :refer [defcomp cursor-> <> div input span]]
+            [respo.core :refer [defcomp cursor-> <> div input span]]
             [respo.comp.inspect :refer [comp-inspect]]
             [inflow-popup.comp.dialog :refer [comp-dialog comp-menu-dialog]]
             [inflow-popup.comp.dropdown :refer [comp-dropdown]]

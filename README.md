@@ -20,6 +20,25 @@ inflow-popup.comp.dialog/comp-menu-dialog
 inflow-popup.comp.dropdown/comp-dropdown
 ```
 
+```clojure
+(if (:show? state)
+ (comp-dialog
+  (fn [mutate!] (mutate! %cursor (update state :show? not)))
+  (div {} (<> "Inside"))))
+
+(if (:show-menu? state)
+     (comp-menu-dialog
+      (fn [result d! m!]
+        (println "result" result)
+        (m! %cursor (update state :show-menu? not)))
+      {:haskell "Haskell",
+       :clojure "Clojure",
+       :elixir (div
+                {:style {}}
+                (div {} (<> "Elixir"))
+                (div {} (<> "...with an extra line")))})))
+```
+
 ### Develop
 
 https://github.com/mvc-works/calcit-workflow

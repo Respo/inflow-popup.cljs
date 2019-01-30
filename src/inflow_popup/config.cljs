@@ -1,19 +1,25 @@
 
-(ns inflow-popup.config (:require [inflow-popup.util :refer [get-env!]]))
+(ns inflow-popup.config )
 
-(def bundle-builds #{"release" "local-bundle"})
+(def cdn?
+  (cond
+    (exists? js/window) false
+    (exists? js/process) (= "true" js/process.env.cdn)
+    :else false))
 
 (def dev?
-  (if (exists? js/window)
-    (do ^boolean js/goog.DEBUG)
-    (not (contains? bundle-builds (get-env! "mode")))))
+  (let [debug? (do ^boolean js/goog.DEBUG)]
+    (cond
+      (exists? js/window) debug?
+      (exists? js/process) (not= "true" js/process.env.release)
+      :else true)))
 
 (def site
-  {:storage "inflow-popup",
-   :dev-ui "http://localhost:8100/main.css",
+  {:dev-ui "http://localhost:8100/main.css",
    :release-ui "http://cdn.tiye.me/favored-fonts/main.css",
    :cdn-url "http://cdn.tiye.me/inflow-popup/",
    :cdn-folder "tiye.me:cdn/inflow-popup",
    :title "Inflow popup",
    :icon "http://cdn.tiye.me/logo/respo.png",
+   :storage-key "inflow-popup",
    :upload-folder "tiye.me:repo/Respo/inflow-popup/"})

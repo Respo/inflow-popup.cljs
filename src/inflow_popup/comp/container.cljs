@@ -1,7 +1,7 @@
 
 (ns inflow-popup.comp.container
   (:require [hsl.core :refer [hsl]]
-            [respo.core :refer [defcomp cursor-> <> div input span]]
+            [respo.core :refer [defcomp cursor-> <> div input span button]]
             [respo.comp.inspect :refer [comp-inspect]]
             [inflow-popup.comp.dialog :refer [comp-dialog comp-menu-dialog]]
             [inflow-popup.comp.dropdown :refer [comp-dropdown]]
@@ -9,7 +9,10 @@
             [inflow-popup.style.layout :as layout]
             [inflow-popup.style.typeset :as typeset]
             [inflow-popup.style.decoration :as decoration]
-            [reel.comp.reel :refer [comp-reel]]))
+            [reel.comp.reel :refer [comp-reel]]
+            [inflow-popup.comp.popup :refer [comp-popup]]
+            [respo-ui.core :as ui]
+            [respo.comp.space :refer [=<]]))
 
 (def example-data ["Clojure" "PureScript" "Reason" "Elm" "Haskell"])
 
@@ -58,6 +61,21 @@
                   {:style {}}
                   (div {} (<> "Elixir"))
                   (div {} (<> "...with an extra line")))})))
+    (div
+     {:style (merge layout/row widget/card)}
+     (div {:style layout/field-area} (<> "Popup"))
+     (cursor->
+      :popup
+      comp-popup
+      states
+      {:trigger (<> "Launch"), :style {:background-color (hsl 0 0 96), :padding "0 8px"}}
+      (fn [toggle!]
+        (div
+         {}
+         (<> "Inside")
+         (=< 8 nil)
+         (button
+          {:style ui/button, :inner-text "Close", :on-click (fn [e d! m!] (toggle! m!))})))))
     (comp-inspect "state" state nil)
     (cursor-> :reel comp-reel states reel {}))))
 

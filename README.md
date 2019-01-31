@@ -25,7 +25,23 @@ inflow-popup.comp.dropdown/comp-dropdown
  (comp-dialog
   (fn [mutate!] (mutate! %cursor (update state :show? not)))
   (div {} (<> "Inside"))))
+```
 
+```clojure
+(cursor-> :popup comp-popup states
+  {:trigger (<> "Launch"),
+   :style {:background-color (hsl 0 0 96), :padding "0 8px"}}
+  (fn [toggle!]
+    (div {}
+     (<> "Inside")
+     (=< 8 nil)
+     (button
+      {:style ui/button,
+       :inner-text "Close",
+       :on-click (fn [e d! m!] (toggle! m!))})))))
+```
+
+```clojure
 (if (:show-menu? state)
      (comp-menu-dialog
       (fn [result d! m!]

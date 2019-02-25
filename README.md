@@ -9,7 +9,7 @@ Demo http://repo.respo-mvc.org/inflow-popup/
 [![Clojars Project](https://img.shields.io/clojars/v/respo/inflow-popup.svg)](https://clojars.org/respo/inflow-popup)
 
 ```edn
-[respo/inflow-popup "0.2.7"]
+[respo/inflow-popup "0.2.8"]
 ```
 
 It's like local dropdown menu component in React.js .
@@ -30,7 +30,8 @@ inflow-popup.comp.dropdown/comp-dropdown
 ```clojure
 (cursor-> :popup comp-popup states
   {:trigger (<> "Launch"),
-   :style {:background-color (hsl 0 0 96), :padding "0 8px"}}
+   :style {:background-color (hsl 0 0 96), :padding "0 8px"}
+   :on-popup (fn [e d! m!])}
   (fn [toggle!]
     (div {}
      (<> "Inside")

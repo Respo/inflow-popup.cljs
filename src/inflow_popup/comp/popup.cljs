@@ -12,9 +12,11 @@
  (let [state (or (:data states) {:show? false})
        toggle! (fn [m!] (m! %cursor (update state :show? not)))
        trigger (:trigger options)
-       user-style (:style options)]
+       user-style (:style options)
+       on-popup (:on-popup options)]
    (div
-    {:style (merge {:cursor :pointer} user-style), :on-click (fn [e d! m!] (toggle! m!))}
+    {:style (merge {:cursor :pointer} user-style),
+     :on-click (fn [e d! m!] (toggle! m!) (if (fn? on-popup) (on-popup e d! m!)))}
     trigger
     (if (:show? state)
       (div

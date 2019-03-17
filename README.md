@@ -12,20 +12,9 @@ Demo http://repo.respo-mvc.org/inflow-popup/
 [respo/inflow-popup "0.2.8"]
 ```
 
-It's like local dropdown menu component in React.js .
+It's like local popup/dropdown menu component in React.js .
 
-```clojure
-inflow-popup.comp.dialog/comp-dialog
-inflow-popup.comp.dialog/comp-menu-dialog
-inflow-popup.comp.dropdown/comp-dropdown
-```
-
-```clojure
-(if (:show? state)
- (comp-dialog
-  (fn [mutate!] (mutate! %cursor (update state :show? not)))
-  (div {} (<> "Inside"))))
-```
+* `inflow-popup.comp.popup/comp-popup`
 
 ```clojure
 (cursor-> :popup comp-popup states
@@ -42,6 +31,18 @@ inflow-popup.comp.dropdown/comp-dropdown
        :on-click (fn [e d! m!] (toggle! m!))})))))
 ```
 
+* `inflow-popup.comp.dialog/comp-dialog`
+
+
+```clojure
+(if (:show? state)
+ (comp-dialog
+  (fn [mutate!] (mutate! %cursor (update state :show? not)))
+  (div {} (<> "Inside"))))
+```
+
+* `inflow-popup.comp.dialog/comp-menu-dialog`
+
 ```clojure
 (if (:show-menu? state)
      (comp-menu-dialog
@@ -55,6 +56,10 @@ inflow-popup.comp.dropdown/comp-dropdown
                 (div {} (<> "Elixir"))
                 (div {} (<> "...with an extra line")))})))
 ```
+
+* `inflow-popup.comp.dropdown/comp-dropdown`
+
+TODO.
 
 ### Develop
 

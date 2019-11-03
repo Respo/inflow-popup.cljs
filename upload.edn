@@ -1,0 +1,6 @@
+
+{:host "tiye.me"
+ :uploads [{:from "dist/*"
+            :to "cdn/inflow-popup/"}
+           {:from "dist/{index.html,manifest.json}"
+            :to "repo/Respo/inflow-popup/"}]}

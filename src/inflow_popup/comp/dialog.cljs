@@ -1,6 +1,6 @@
 
 (ns inflow-popup.comp.dialog
-  (:require [respo.core :refer [defcomp cursor-> list-> <> div span]]
+  (:require [respo.core :refer [defcomp >> list-> <> div span]]
             [inflow-popup.style.layout :as layout]
             [inflow-popup.style.widget :as widget]
             [inflow-popup.style.decoration :as decoration]
@@ -14,7 +14,7 @@
  (on-close! element-inside)
  (div
   {:style (merge layout/float-fullscreen decoration/dim layout/hold-center {:z-index 100}),
-   :on-click (fn [e d! m!] (on-close! m!))}
+   :on-click (fn [e d!] (on-close! d!))}
   (div {:on-click on-focus, :style widget/card} element-inside)))
 
 (def style-menu-item
@@ -33,7 +33,7 @@
  (assert (map? candidates) "candidates was supposed to be a map!")
  (div
   {:style (merge layout/float-fullscreen decoration/dim layout/hold-center {:z-index 100}),
-   :on-click (fn [e d! m!] (on-choose! nil d! m!))}
+   :on-click (fn [e d!] (on-choose! nil d!))}
   (div
    {:style {:background-color :white}}
    (div
@@ -53,5 +53,5 @@
           (fn [idx [k v]]
             [idx
              (div
-              {:on-click (fn [e d! m!] (on-choose! k d! m!)), :style style-menu-item}
+              {:on-click (fn [e d!] (on-choose! k d!)), :style style-menu-item}
               (if (string? v) (<> v) v))])))))))

@@ -1,7 +1,7 @@
 
 (ns inflow-popup.comp.container
   (:require [hsl.core :refer [hsl]]
-            [respo.core :refer [defcomp cursor-> <> div input span button]]
+            [respo.core :refer [defcomp >> <> div input span button]]
             [respo.comp.inspect :refer [comp-inspect]]
             [inflow-popup.comp.dialog :refer [comp-dialog comp-menu-dialog]]
             [inflow-popup.comp.dropdown :refer [comp-dropdown]]
@@ -18,43 +18,43 @@
 
 (def initial-state {:show? false, :selected (first example-data), :show-menu? false})
 
-(defn on-click [state] (fn [e d! m!] (m! (update state :show? not))))
-
 (defcomp
  comp-container
  (reel)
- (let [store (:store reel), states (:states store), state (or (:data states) initial-state)]
+ (let [store (:store reel)
+       states (:states store)
+       state (or (:data states) initial-state)
+       cursor []]
    (div
     {:style (merge widget/card typeset/page-default)}
     (div
      {:style (merge layout/row widget/card)}
      (div {:style layout/field-area} (<> "a dialog"))
-     (div {:style widget/button, :on-click (on-click state)} (<> "Toggle"))
+     (div
+      {:style widget/button, :on-click (fn [e d!] (d! cursor (update state :show? not)))}
+      (<> "Toggle"))
      (if (:show? state)
-       (comp-dialog
-        (fn [mutate!] (mutate! %cursor (update state :show? not)))
-        (div {} (<> "Inside")))))
+       (comp-dialog (fn [d!] (d! cursor (update state :show? not))) (div {} (<> "Inside")))))
     (div
      {:style (merge layout/row widget/card)}
      (div {:style layout/field-area} (<> "a droplist"))
-     (cursor->
-      :dropdown
-      comp-dropdown
-      states
+     (comp-dropdown
+      (>> states :dropdown)
       example-data
       (:selected state)
-      (fn [next-item m!] (m! %cursor (assoc state :selected next-item)))))
+      (fn [next-item d!] (d! cursor (assoc state :selected next-item)))))
     (div
      {:style (merge layout/row widget/card)}
      (div {:style layout/field-area} (<> "a menu dialog"))
      (div
-      {:style widget/button, :on-click (fn [e d! m!] (m! (update state :show-menu? not)))}
+      {:style widget/button,
+       :on-click (fn [e d!] (d! cursor (update state :show-menu? not)))}
       (<> "Toggle"))
      (if (:show-menu? state)
        (comp-menu-dialog
-        (fn [result d! m!]
+        (fn [result d!]
           (println "result" result)
-          (m! %cursor (update state :show-menu? not)))
+          (d! cursor (update state :show-menu? not)))
         {:haskell "Haskell",
          :clojure "Clojure",
          :elixir (div
@@ -64,10 +64,8 @@
     (div
      {:style (merge layout/row widget/card)}
      (div {:style layout/field-area} (<> "Popup"))
-     (cursor->
-      :popup
-      comp-popup
-      states
+     (comp-popup
+      (>> states :popup)
       {:trigger (<> "Launch"), :style {:background-color (hsl 0 0 96), :padding "0 8px"}}
       (fn [toggle!]
         (div
@@ -75,8 +73,8 @@
          (<> "Inside")
          (=< 8 nil)
          (button
-          {:style ui/button, :inner-text "Close", :on-click (fn [e d! m!] (toggle! m!))})))))
+          {:style ui/button, :inner-text "Close", :on-click (fn [e d!] (toggle! d!))})))))
     (comp-inspect "state" state nil)
-    (cursor-> :reel comp-reel states reel {}))))
+    (comp-reel (>> states :reel) reel {}))))
 
 (defn on-close [mutate!] (fn [] (mutate! :show?)))

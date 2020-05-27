@@ -1,0 +1,6 @@
+{:version "0.3.0-a1"
+ :group-id "respo"
+ :artifact-id "inflow-popup"
+ :skip-tag true
+ :description "Local popup component for Respo"
+ :scm-url "https://github.com/Respo/inflow-popup"}

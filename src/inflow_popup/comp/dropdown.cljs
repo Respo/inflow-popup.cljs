@@ -1,7 +1,7 @@
 
 (ns inflow-popup.comp.dropdown
   (:require [hsl.core :refer [hsl]]
-            [respo.core :refer [defcomp cursor-> list-> <> div span style]]
+            [respo.core :refer [defcomp >> list-> <> div span style]]
             [inflow-popup.style.layout :as layout]
             [inflow-popup.style.widget :as widget]))
 
@@ -50,9 +50,9 @@
 (defcomp
  comp-dropdown
  (states candidates current on-select)
- (let [state (if (some? (:data states)) (:data states) false)]
+ (let [state (if (some? (:data states)) (:data states) false), cursor (:cursor states)]
    (div
-    {:style (merge layout/row style-button), :on-click (fn [e d! m!] (m! (not state)))}
+    {:style (merge layout/row style-button), :on-click (fn [e d!] (d! cursor (not state)))}
     (<> current (merge layout/flex style-text))
     (div {:style style-divider})
     (div
@@ -68,6 +68,6 @@
                 (div
                  {:class-name "dropdown-item",
                   :style style-item,
-                  :on-click (fn [e d! m!] (on-select item m!) (m! (not state)))}
+                  :on-click (fn [e d!] (on-select item d!) (d! cursor (not state)))}
                  (<> item))])))))
     (if state item-hover-style))))

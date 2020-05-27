@@ -1,5 +1,5 @@
 
-(ns inflow-popup.updater (:require [respo.cursor :refer [mutate]]))
+(ns inflow-popup.updater (:require [respo.cursor :refer [update-states]]))
 
 (defn updater [store op op-data op-id op-time]
-  (case op :states (update store :states (mutate op-data)) store))
+  (case op :states (update-states store op-data) store))
